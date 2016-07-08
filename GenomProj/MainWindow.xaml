@@ -3,7 +3,23 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <Image Name="img"  HorizontalAlignment="Left" Height="100" Margin="35,26,0,0" VerticalAlignment="Top" Width="100"/>
- 
+        <StackPanel>
+            <!--Менюха-->
+            <StackPanel Name="menu">
+                <StackPanel Name="Menu1str" Orientation="Horizontal">
+                    <Button Name="OpenFile" Content="Открыть файл" Click="OpenFile_Click" Width="100"/>
+                    <Label Name="Scale" Content="Масштаб" Margin="30,0,0,0"/>
+                </StackPanel>
+                <StackPanel Name="Menu2str" Orientation="Horizontal">
+                    <Label Name="FileName" Content="FileName" Width="100"/>
+                    <TextBox Name="ScaleValue" Text="1" Margin="30,0,0,0" Width="40"/>
+                    <Button Name="OK_btn" Content="ОК" Click="OK_btn_Click"/>
+                </StackPanel>
+                <ProgressBar Name="PrgrsBar" TextBlock.FontWeight="Bold" Tag="50%" Width="200" Height="20" Minimum="0" Maximum="60" Value="50"/>
+        </StackPanel>
+            <!--изображение-->
+            <Image Name="img"  HorizontalAlignment="Left" Height="100" Margin="35,26,0,0" VerticalAlignment="Top" Width="100" />
+                
+        </StackPanel>
     </Grid>
 </Window>

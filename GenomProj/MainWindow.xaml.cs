@@ -31,6 +31,17 @@ namespace GenomProj
                                     PixelFormats.Bgr32,
                                     null);
             img.Source = wb;
+
+        }
+
+        private void OpenFile_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OK_btn_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
