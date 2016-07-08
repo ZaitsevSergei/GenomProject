@@ -1,0 +1,13 @@
+D:\GenomProj\GenomProj\bin\Debug\GenomProj.exe.config
+D:\GenomProj\GenomProj\bin\Debug\GenomProj.exe
+D:\GenomProj\GenomProj\bin\Debug\GenomProj.pdb
+D:\GenomProj\GenomProj\obj\Debug\GenomProj.csprojResolveAssemblyReference.cache
+D:\GenomProj\GenomProj\obj\Debug\MainWindow.baml
+D:\GenomProj\GenomProj\obj\Debug\MainWindow.g.cs
+D:\GenomProj\GenomProj\obj\Debug\App.g.cs
+D:\GenomProj\GenomProj\obj\Debug\GenomProj_MarkupCompile.cache
+D:\GenomProj\GenomProj\obj\Debug\GenomProj.g.resources
+D:\GenomProj\GenomProj\obj\Debug\GenomProj.Properties.Resources.resources
+D:\GenomProj\GenomProj\obj\Debug\GenomProj.csproj.GenerateResource.Cache
+D:\GenomProj\GenomProj\obj\Debug\GenomProj.exe
+D:\GenomProj\GenomProj\obj\Debug\GenomProj.pdb
