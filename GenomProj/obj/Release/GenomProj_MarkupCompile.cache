@@ -4,11 +4,11 @@
 winexe
 C#
 .cs
-D:\GenomProj\GenomProj\obj\Debug\
+D:\GenomProj\GenomProj\obj\Release\
 GenomProj
 none
 false
-DEBUG;TRACE
+TRACE
 D:\GenomProj\GenomProj\App.xaml
 11151548125
 

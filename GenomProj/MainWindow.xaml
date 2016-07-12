@@ -17,13 +17,13 @@
                 </StackPanel>
                 <!--Прогресс бар-->
                 <Grid Name="pb">
-                    <ProgressBar Name="PrgrsBar" Width="200" Height="20" Minimum="0" Background="White"/>
-                    <TextBlock Name="pbValueTb" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <ProgressBar Name="PrgrsBar" Width="200" Height="20" Minimum="0" Margin="36,6,281,0"/>
+                    <Label Name="pbValueLb" Content="nstart" FontWeight="Bold" HorizontalAlignment="Right" Width="120" Margin="0,0,55,0"/>
                 </Grid>
             </StackPanel>
+            <Image x:Name="img"  HorizontalAlignment="Left" Height="100" Margin="35,26,0,0" VerticalAlignment="Top" Width="100" />
             <!--изображение-->
-            <Image Name="img"  HorizontalAlignment="Left" Height="100" Margin="35,26,0,0" VerticalAlignment="Top" Width="100" />
-                
+
         </StackPanel>
     </Grid>
 </Window>

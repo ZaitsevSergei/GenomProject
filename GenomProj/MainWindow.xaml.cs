@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,54 +22,81 @@ namespace GenomProj
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string pbValue { get; set; }    
-        private string filePath = "test.txt";    //genm к файлу кода генома
+        private string pbValue { get; set; }
+        private string filePath = "test.txt";    //путь к файлу кода генома
+        private int filelinescount = 0; //количество строк в файле
         private List<byte[]> data;
+
+        BackgroundWorker bw = new BackgroundWorker(); // backgroundworker
+
         public MainWindow()
         {
             InitializeComponent();
-            WriteableBitmap wb = new WriteableBitmap(
-                                    (int)img.Width,
-                                    (int)img.Height,
-                                    96,
-                                    96,
-                                    PixelFormats.Bgr32,
-                                    null);
+
+            // инициализация backgroundworker
+            bw.WorkerSupportsCancellation = true;   //разрешение отмены
+            bw.WorkerReportsProgress = true;        //разрешение прогресса
+            bw.DoWork += bw_DoWork;
+            bw.ProgressChanged += bw_ProgressChanged;
+            bw.RunWorkerCompleted += bw_RunWorkerCompleted;
+            //WriteableBitmap wb = new WriteableBitmap(
+            //                        (int)img.Width,
+            //                        (int)img.Height,
+            //                        96,
+            //                        96,
+            //                        PixelFormats.Bgr32,
+            //                        null);
             //Int32Rect rect = new Int32Rect(0, 0, 1, 1);
             //wb.WritePixels(rect, data, 4, 0);
-            img.Source = wb;
-            ReadFile(filePath);
-
+            //img.Source = wb;
+            
         }
 
-        //чтение файла генома
-        private void ReadFile(string filename)
+        void bw_DoWork(object sender, DoWorkEventArgs e)
         {
-            string line; //символ
-            //char ch; //символ
-            int index; //индекс
-            int counter = 0; //счетчик
-            byte[] buf; // буфер с цветом буквы
-            System.IO.StreamReader file = new System.IO.StreamReader(filename);
-            System.IO.FileInfo fileinfo = new System.IO.FileInfo(filename);
-            int size = Convert.ToInt32(fileinfo.Length);
+            ReadFile();
+            
+        }
+        
+        void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            MessageBox.Show("readfile");
+        }
 
+        void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            PrgrsBar.Value = ((double)e.ProgressPercentage / filelinescount)*100;
+            pbValueLb.Content = e.ProgressPercentage.ToString() + " / " + filelinescount.ToString();
+        }
+
+        
+
+        //чтение файла генома
+        private void ReadFile()
+        {
+            string line; // строка
+            byte[] buf; // буфер с цветом буквы
+
+            System.IO.StreamReader file = new System.IO.StreamReader(filePath);
+            filelinescount = System.IO.File.ReadAllLines(filePath).Length;
             data = new List<byte[]>();
-            PrgrsBar.Maximum = size;
-            PrgrsBar.Value = 0;
+
             //чтение файла
-            while ((line = file.ReadLine()) != null)
+            for (int i = 0; i < filelinescount; i++)
             {
-                index = 0;
-                foreach(char ch in line)
+                line = file.ReadLine();
+                foreach (char ch in line)
                 {
                     buf = defineColor(ch);
                     data.Add(buf);
-                    index++;
-                    PrgrsBar.Value++;
                 }
-                
+                if ((i % 100) == 0)
+                {
+                    Thread.Sleep(10);
+                    bw.ReportProgress(i + 1);
+                }
             }
+            bw.ReportProgress(filelinescount);
         }
 
         //буква => цвет
@@ -107,7 +136,12 @@ namespace GenomProj
 
         private void OpenFile_Click(object sender, RoutedEventArgs e)
         {
-            //ReadFile(filePath);
+            if (bw.IsBusy != true)
+            {
+                //PrgrsBar.IsIndeterminate = true;
+                bw.RunWorkerAsync();
+            }
+
         }
 
         private void OK_btn_Click(object sender, RoutedEventArgs e)
