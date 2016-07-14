@@ -12,8 +12,8 @@
                 </StackPanel>
                 <StackPanel Name="Menu2str" Orientation="Horizontal">
                     <Label Name="FileName" Content="FileName" Width="100"/>
-                    <TextBox Name="ScaleValue" Text="1" Margin="30,0,0,0" Width="40"/>
-                    <Button Name="OK_btn" Content="ОК" Click="OK_btn_Click"/>
+                    <TextBox Name="ScaleValue" Text="1" Margin="30,0,0,0" Width="40" IsEnabled="False"/>
+                    <Button Name="OK_btn" Content="ОК" Click="OK_btn_Click" IsEnabled="False"/>
                 </StackPanel>
                 <!--Прогресс бар-->
                 <Grid Name="pb">

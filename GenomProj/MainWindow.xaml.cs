@@ -27,39 +27,81 @@ namespace GenomProj
         private int filelinescount = 0; //количество строк в файле
         private List<byte[]> data;
 
-        BackgroundWorker bw = new BackgroundWorker(); // backgroundworker
+        BackgroundWorker fw; // backgroundworker 1 filework
+        BackgroundWorker iw; // backgroundworker 2 imagework
         WriteableBitmap wb;
-
+        int scale;
+        int rowCount = 0;   //количество строк
+        int colCount = 0;   //количество столбцов
         public MainWindow()
         {
             InitializeComponent();
-
-            // инициализация backgroundworker
-            bw.WorkerSupportsCancellation = true;   //разрешение отмены
-            bw.WorkerReportsProgress = true;        //разрешение прогресса
-            bw.DoWork += bw_DoWork;
-            bw.ProgressChanged += bw_ProgressChanged;
-            bw.RunWorkerCompleted += bw_RunWorkerCompleted;
+            initBackgroundThreads();
+            
             
             
         }
 
-        void bw_DoWork(object sender, DoWorkEventArgs e)
+        private void initBackgroundThreads()
+        {
+            // Для работы с файлом
+            fw = new BackgroundWorker();    
+            fw.WorkerSupportsCancellation = true;   //разрешение отмены
+            fw.WorkerReportsProgress = true;        //разрешение прогресса
+            fw.DoWork += fw_DoWork;
+            fw.ProgressChanged += fw_ProgressChanged;
+            fw.RunWorkerCompleted += fw_RunWorkerCompleted;
+
+            // Для работы с изображением
+            iw = new BackgroundWorker();
+            iw.WorkerSupportsCancellation = true;   //разрешение отмены
+            iw.WorkerReportsProgress = true;        //разрешение прогресса
+            iw.DoWork += iw_DoWork;
+            iw.ProgressChanged += iw_ProgressChanged;
+            iw.RunWorkerCompleted += iw_RunWorkerCompleted;
+        }
+
+        void iw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            
+            img.Source = wb;
+            OpenFile.IsEnabled = true;
+        }
+
+        void iw_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            PrgrsBar.Value = ((double)e.ProgressPercentage / filelinescount) * 100;
+            pbValueLb.Content = e.ProgressPercentage.ToString() + " / " + filelinescount.ToString();
+
+        }
+
+        void iw_DoWork(object sender, DoWorkEventArgs e)
+        {            
+
+            drawGenom();
+        }
+
+        void fw_DoWork(object sender, DoWorkEventArgs e)
         {
             readFile();            
         }
         
-        void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        void fw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            MessageBox.Show("readfile");
-            DrawGenom();
+            ScaleValue.IsEnabled = true;
+            OK_btn.IsEnabled = true;
+
             
         }
 
-        void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        void fw_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             PrgrsBar.Value = ((double)e.ProgressPercentage / filelinescount)*100;
             pbValueLb.Content = e.ProgressPercentage.ToString() + " / " + filelinescount.ToString();
+            if ((((double)e.ProgressPercentage / filelinescount) * 100) % 10 == 0)
+            {
+                img.Source = wb;
+            }
         }
         
         //чтение файла генома
@@ -84,10 +126,10 @@ namespace GenomProj
                 if ((i % 100) == 0)
                 {
                     Thread.Sleep(10);
-                    bw.ReportProgress(i + 1);
+                    fw.ReportProgress(i + 1);
                 }
             }
-            bw.ReportProgress(filelinescount);
+            fw.ReportProgress(filelinescount);
         }
 
         //буква => цвет
@@ -120,42 +162,87 @@ namespace GenomProj
                     break;
             }
 
-            byte[] color = {blue, green, red, 255};
+            byte[] color = {blue, green, red, 0};
 
             return color;
         }
 
         private void OpenFile_Click(object sender, RoutedEventArgs e)
         {
-            if (bw.IsBusy != true)
+            if (fw.IsBusy != true)
             {
                 //PrgrsBar.IsIndeterminate = true;
-                bw.RunWorkerAsync();
+                ScaleValue.IsEnabled = false;
+                OK_btn.IsEnabled = false;
+                fw.RunWorkerAsync();
             }
 
         }
 
         private void OK_btn_Click(object sender, RoutedEventArgs e)
         {
+            scale = Convert.ToInt32(ScaleValue.Text);   // масштаб
+            initSizes();
+            PrgrsBar.Value = 0;
+            drawGenom();
+            img.Source = wb;
+            //if (iw.IsBusy != true)
+            //{
+            //    wb = null;
+            //    img.Source = null;
+            //    OpenFile.IsEnabled = false;
+            //    scale = Convert.ToInt32(ScaleValue.Text);   // масштаб
+            //    initSizes();
+            //    PrgrsBar.Value = 0;
+            //    iw.RunWorkerAsync();
 
+            //}
         }
 
-        private void DrawGenom()
+        private void drawGenom()
         {
-            int scale = Convert.ToInt32(ScaleValue.Text);   // масштаб
             int x = 0;  // координата Х
             int y = 0;  // координата У
 
             int index = 0;  // индекс
             //------------------------------------
             // инициализация размера точки
-            int rowCount = 0;   //количество строк
-            int colCount = 0;   //количество столбцов
 
+            //------------------------------------
+            // инициализация изображения и рисования
+            //img.Height = filelinescount * rowCount;
+            //img.Width = 70 * colCount;
+
+            wb = new WriteableBitmap(
+                        70 * colCount,
+                        filelinescount * rowCount,
+                        100,
+                        100,
+                        PixelFormats.Bgr32,
+                        null);
+
+            foreach (byte[] point in data)
+            {
+                drawPoint(point, x, y, rowCount, colCount);
+                x += colCount;
+                index++;
+                if ((index % 70) == 0)
+                {
+                    x = 0;
+                    y += rowCount;
+                    iw.ReportProgress(index/70);
+                }
+            }
+
+            //img.Source = wb;
+        }
+
+        private void initSizes()
+        {
             double sqrt = Math.Sqrt(scale); // квадратный корень масштаба
             int sqrtInt = (int)sqrt;        // целая часть
-          
-            if((sqrt - sqrtInt) == 0)   // масштаб - квадрат числа, кол-во строк = столбцам
+
+            if ((sqrt - sqrtInt) == 0)   // масштаб - квадрат числа, кол-во строк = столбцам
             {
                 rowCount = sqrtInt;
                 colCount = sqrtInt;
@@ -171,34 +258,8 @@ namespace GenomProj
                 colCount = sqrtInt + 1;
             }
 
-            //------------------------------------
-            // инициализация изображения и рисования
             img.Height = filelinescount * rowCount;
             img.Width = 70 * colCount;
-
-            wb = new WriteableBitmap(
-                        70 * colCount,
-                        filelinescount * rowCount,
-                        70 * colCount,
-                        filelinescount * rowCount,
-                        PixelFormats.Bgra32,
-                        null);
-            
-            //foreach (byte[] point in data)
-            //{
-            //    drawPoint(point, x, y, rowCount, colCount);
-            //    x += colCount;
-            //    index++;
-            //    if (index == 70)
-            //    {
-            //        //index = 0;
-            //        //x = 0;
-            //        //y += rowCount;
-            //        break;
-            //    }
-            //}
-
-            img.Source = wb;
         }
 
         private void drawPoint(byte[] point, int x, int y, int row,int col)
@@ -212,9 +273,9 @@ namespace GenomProj
                 {
                     rect = new Int32Rect(j, i, 1, 1);
                     stride = (rect.Width * wb.Format.BitsPerPixel + 7) / 8;
-                    wb.WritePixels(rect, point, stride, 0);
+                    wb.WritePixels(rect, point, 4, 0);
                     index++;
-                    if (index == Convert.ToInt32(ScaleValue.Text))
+                    if (index == scale)
                     { 
                         return;
                     }
