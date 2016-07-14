@@ -1,8 +1,11 @@
 ﻿<Window x:Class="GenomProj.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        WindowState="Maximized"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True">
+    <Grid ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="True">
+        
         <StackPanel>
             <!--Менюха-->
             <StackPanel Name="menu">
@@ -21,9 +24,11 @@
                     <Label Name="pbValueLb" Content="nstart" FontWeight="Bold" HorizontalAlignment="Right" Width="141" Margin="0,0,55,0"/>
                 </Grid>
             </StackPanel>
-            <Image Name="img"  HorizontalAlignment="Left" Height="100" Margin="35,26,0,0" VerticalAlignment="Top" Width="100" />
             <!--изображение-->
-
+            
+                <Image Name="img"  HorizontalAlignment="Left" Height="100" Margin="35,26,0,0" VerticalAlignment="Top" Width="100" />
+            
         </StackPanel>
     </Grid>
+    </ScrollViewer>
 </Window>

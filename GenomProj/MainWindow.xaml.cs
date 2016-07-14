@@ -182,6 +182,7 @@ namespace GenomProj
         private void OK_btn_Click(object sender, RoutedEventArgs e)
         {
             scale = Convert.ToInt32(ScaleValue.Text);   // масштаб
+            
             initSizes();
             PrgrsBar.Value = 0;
             drawGenom();
