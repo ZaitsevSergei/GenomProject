@@ -11,22 +11,24 @@
             <StackPanel Name="menu">
                 <StackPanel Name="Menu1str" Orientation="Horizontal">
                     <Button Name="OpenFile" Content="Открыть файл" Click="OpenFile_Click" Width="100"/>
-                    <Label Name="Scale" Content="Масштаб" Margin="30,0,0,0"/>
+                    <Label Name="Params" Content="Масштаб и ширина изображения" Margin="30,0,0,0"/>
+                    
                 </StackPanel>
                 <StackPanel Name="Menu2str" Orientation="Horizontal">
                     <Label Name="FileName" Content="FileName" Width="100"/>
                     <TextBox Name="ScaleValue" Text="1" Margin="30,0,0,0" Width="40" IsEnabled="False"/>
-                    <Button Name="OK_btn" Content="ОК" Click="OK_btn_Click" IsEnabled="False"/>
-                </StackPanel>
+                    <TextBox x:Name="WidthValue" Text="300" Margin="10,0,0,0" Width="80" IsEnabled="False"/>
+                    <Button x:Name="OK_btn" Content="ОК" Margin="10,0,0,0" Click="OK_btn_Click" IsEnabled="False"/>
+                    </StackPanel>
                 <!--Прогресс бар-->
                 <Grid Name="pb">
-                    <ProgressBar Name="PrgrsBar" Height="20" Minimum="0" Margin="36,6,268,0"/>
-                    <Label Name="pbValueLb" Content="nstart" FontWeight="Bold" HorizontalAlignment="Right" Width="141" Margin="0,0,55,0"/>
+                    <ProgressBar Name="PrgrsBar" Width="200" Minimum="0" Margin="36,6,35,0"/>
+                    <Label Name="pbValueLb" Content="nstart" FontWeight="Bold" HorizontalAlignment="Right" Width="141" Margin="0,0,55,0" Grid.Column="1"/>
                 </Grid>
             </StackPanel>
             <!--изображение-->
             
-                <Image Name="img"  HorizontalAlignment="Left" Height="100" Margin="35,26,0,0" VerticalAlignment="Top" Width="100" />
+                <Image Name="img"  HorizontalAlignment="Left" Height="100" Margin="10,30,0,0" VerticalAlignment="Top" Width="100" />
             
         </StackPanel>
     </Grid>
