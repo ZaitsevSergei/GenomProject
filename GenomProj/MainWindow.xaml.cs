@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -196,6 +197,7 @@ namespace GenomProj
                 OpenFile.IsEnabled = false;
                 OK_btn.IsEnabled = false;
                 Cancel_btn.IsEnabled = true;
+                Save_btn.IsEnabled = false;
                 initSizes();    // определяем размеры изображения
                 PrgrsBar.Value = 0;
                 processType.Content = "Идет построение изображения...";
@@ -216,9 +218,9 @@ namespace GenomProj
             //drawGenom();
             int x = 0;  // координата Х
             int y = 0;  // координата У
-            Int32Rect rect;
+            //Int32Rect rect;
             int progress = 0;  // прогресс рисования изображения
-            int index = 0; // индекс
+            //int index = 0; // индекс
                        
             foreach (byte[] point in data)
             {
@@ -261,6 +263,7 @@ namespace GenomProj
             img.Source = wb;
             OpenFile.IsEnabled = true;
             OK_btn.IsEnabled = true;
+            Save_btn.IsEnabled = true;
             
         }
 
@@ -309,6 +312,7 @@ namespace GenomProj
 
         }
 
+        // инициализация размеров изображения
         private void initSizes()
         {
             double sqrt = Math.Sqrt(scale); // квадратный корень масштаба
@@ -332,9 +336,9 @@ namespace GenomProj
             
 
             // инициализация размеров
-            int dimPerPoint = rowCount * colCount;  // пикселей на точку
-            int pixelCount = dimPerPoint * data.Count;
-            if (WidthValue.Text.Equals("1"))
+            int dimPerPoint = rowCount * colCount;  // разрешение : пикселей на точку
+            int pixelCount = dimPerPoint * data.Count; //количество пикселей в изображении
+            if (WidthValue.Text.Equals("1"))    // 3:4
             {
                 width = (int)Math.Ceiling(
                         Math.Sqrt((double)(pixelCount / 1.33))
@@ -374,6 +378,46 @@ namespace GenomProj
 
         }
 
+        private void Save_btn_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "Формат Jpeg|*.jpg|Формат BMP|*.bmp";
+            sfd.FileName = "Image " + width.ToString() + "x" + height.ToString();
+            sfd.ShowDialog();
+            
+            if (sfd.FileName != "")
+            {
+                switch (sfd.FilterIndex)
+                {
+                    case 1:
+                        saveJpeg(sfd.FileName);
+                        break;
+                    case 2:
+                        saveBmp(sfd.FileName);
+                        break;
+                }
+            }
+        }
+
+        private void saveBmp(string filename)
+        {
+            using (FileStream stream = new FileStream(filename, FileMode.Create))
+            {
+                BmpBitmapEncoder encoder = new BmpBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(wb.Clone()));
+                encoder.Save(stream);
+            }
+        }
+
+        private void saveJpeg(string filename)
+        {
+            using (FileStream stream = new FileStream(filename, FileMode.Create))
+            {
+                JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(wb.Clone()));
+                encoder.Save(stream);
+            }
+        }
         
     }
 }
