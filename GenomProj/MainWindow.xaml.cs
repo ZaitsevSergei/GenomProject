@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Microsoft.Win32;
 
 namespace GenomProj
 {
@@ -24,7 +25,7 @@ namespace GenomProj
     public partial class MainWindow : Window
     {
         private string pbValue { get; set; }
-        private string filePath = "test.txt";    //путь к файлу кода генома
+        private string filePath {get; set;}    //путь к файлу кода генома
         private int filelinescount = 0; //количество строк в файле
         private List<byte[]> data;
 
@@ -38,7 +39,7 @@ namespace GenomProj
         int rowCount = 0;   //количество строк
         int colCount = 0;   //количество столбцов
 
-        bool firstFlag = true; // первая отрисовка для файла
+        
 
         public MainWindow()
         {
@@ -70,13 +71,25 @@ namespace GenomProj
         // Клик кнопки Открыть файл
         private void OpenFile_Click(object sender, RoutedEventArgs e)
         {
+            OpenFileDialog opf = new OpenFileDialog();
+            opf.Filter = "Текстовые файлы(*.txt)|*.txt" + "|Все файлы(*.*)|*.*";
+            if (opf.ShowDialog() == true)
+            {
+                filePath = opf.FileName;
+                FileName.Text = opf.FileName;
+            }
+            else 
+            {
+                return;
+            }
             if (fw.IsBusy != true)
             {
                 //PrgrsBar.IsIndeterminate = true;
                 ScaleValue.IsEnabled = false;
                 WidthValue.IsEnabled = false;
                 OK_btn.IsEnabled = false;
-                firstFlag = true;
+                Save_btn.IsEnabled = false;
+                
                 processType.Content = "Идет загрузка файла...";
                 fw.RunWorkerAsync();
             }
@@ -101,12 +114,9 @@ namespace GenomProj
         // Прогресс BGw для работы с фалом
         void fw_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
+
             PrgrsBar.Value = ((double)e.ProgressPercentage / filelinescount) * 100;
-            pbValueLb.Content = e.ProgressPercentage.ToString() + " / " + filelinescount.ToString() + " строк";
-            if ((((double)e.ProgressPercentage / filelinescount) * 100) % 10 == 0)
-            {
-                img.Source = wb;
-            }
+            pbValueLb.Content = e.ProgressPercentage.ToString() + " / " + filelinescount.ToString() + " строк";           
         }
 
         //чтение файла генома
@@ -330,7 +340,7 @@ namespace GenomProj
                         Math.Sqrt((double)(pixelCount / 1.33))
                         );
                 height = (int)Math.Ceiling(1.33 * width);
-                firstFlag = false;
+                
                 WidthValue.IsEnabled = true;
             }
             else
@@ -362,6 +372,8 @@ namespace GenomProj
                 iw.CancelAsync();
             }
 
-        }          
+        }
+
+        
     }
 }
