@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         WindowState="Maximized"
         Unloaded="Window_Unloaded_1"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Визуализация Генома" Height="350" Width="525">
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True">
     <Grid ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="True">
         
@@ -29,13 +29,15 @@
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
                             <Label Name="processType" Content="ProcessType" FontWeight="Bold" HorizontalAlignment="Left" Width="250"/>
-                            <Label x:Name="pbValueLb" Content="process" FontWeight="Bold" Margin="0,0,0,0" HorizontalAlignment="Left" Width="121" />
+                            <Label x:Name="pbValueLb" Content="process" FontWeight="Bold" Margin="0,0,0,0" HorizontalAlignment="Left" Width="203" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <ProgressBar x:Name="PrgrsBar" Width="316" Height="20"  Minimum="0" Margin="6,0,0,0" HorizontalAlignment="Left"/>
                             <Button Name="Cancel_btn" Content="Отмена" Click="Cancel_btn_Click" Margin="10,0,0,0" IsEnabled="False"/>
                             <Button Name="Save_btn" Content="Сохранить" Click="Save_btn_Click" Margin="20,0,0,0" IsEnabled="False" />
-                        </StackPanel>
+                            <Label Name="img_size" Margin="10,0,0,0" Width="auto"/>
+                                
+                            </StackPanel>
                     </StackPanel>
                 </StackPanel>
                 
