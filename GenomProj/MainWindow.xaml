@@ -10,11 +10,11 @@
         <StackPanel>
             <!--Менюха-->
             <StackPanel Name="menu">
-                <StackPanel Name="Menu1str" Orientation="Horizontal">
+                    <StackPanel Name="Menu1str" Orientation="Horizontal" Margin="10,10,0,0">
                         <Button x:Name="OpenFile" Content="Открыть файл" Click="OpenFile_Click" Width="100"/>
                         <TextBox x:Name="FileName" Text="" Width="354" Margin="10,0,0,0"/>
                     </StackPanel>
-                <StackPanel Name="Menu2str" Orientation="Horizontal" Margin="0,10,0,0">
+                <StackPanel Name="Menu2str" Orientation="Horizontal" Margin="10,10,0,0">
                         <StackPanel>
                             <Label x:Name="Param1" Content="Масштаб" />
                             <Label x:Name="Param2" Content="Ширина" />
@@ -22,10 +22,12 @@
                         <StackPanel>
                             <TextBox x:Name="ScaleValue" Text="1" Margin="10,0,0,0" Width="80" IsEnabled="True" Height="25"/>
                             <TextBox x:Name="WidthValue" Text="1" Margin="10,0,0,0" Width="80" IsEnabled="True" Height="25"/>
+                            
                         </StackPanel>
                         <Button x:Name="OK_btn" Content="ОК" Margin="10,0,0,0" Click="OK_btn_Click" IsEnabled="False" Width="38"/>
                     </StackPanel>
-                <!--Прогресс бар-->
+                    <CheckBox x:Name="paint_cb" Content="Вывод пикселей" Margin="10,0,355,0" VerticalAlignment="Bottom" IsEnabled="False" IsChecked="True"/>
+                    <!--Прогресс бар-->
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
                             <Label Name="processType" Content="ProcessType" FontWeight="Bold" HorizontalAlignment="Left" Width="250"/>

@@ -26,7 +26,8 @@ namespace GenomProj
     public partial class MainWindow : Window
     {
         private string pbValue { get; set; }
-        private string filePath {get; set;}    //путь к файлу кода генома
+        private string filePath { get; set; }    // путь к файлу кода генома
+        private string filename { get; set; }   // имя файла
         private int filelinescount = 0; //количество строк в файле
         private List<byte[]> data;
 
@@ -39,9 +40,7 @@ namespace GenomProj
         int height; // высота изображения
         int rowCount = 0;   //количество строк для рисования точки
         int colCount = 0;   //количество столбцов для рисования точки
-
         
-
         public MainWindow()
         {
             InitializeComponent();
@@ -79,6 +78,7 @@ namespace GenomProj
             if (opf.ShowDialog() == true)
             {
                 filePath = opf.FileName;
+                filename = opf.SafeFileName;
                 FileName.Text = opf.FileName;
             }
             else 
@@ -92,6 +92,7 @@ namespace GenomProj
                 WidthValue.IsEnabled = false;
                 OK_btn.IsEnabled = false;
                 Save_btn.IsEnabled = false;
+                paint_cb.IsEnabled = false;
                 img.Source = null;
                 img_size.Content = "";
                 processType.Content = "Идет загрузка файла...";
@@ -111,6 +112,7 @@ namespace GenomProj
             ScaleValue.IsEnabled = true;
             WidthValue.IsEnabled = true;
             OK_btn.IsEnabled = true;
+            paint_cb.IsEnabled = true;
             processType.Content = "Загрузка файла завершена!";
         }
 
@@ -198,6 +200,7 @@ namespace GenomProj
                 OK_btn.IsEnabled = false;
                 Cancel_btn.IsEnabled = true;
                 Save_btn.IsEnabled = false;
+                paint_cb.IsEnabled = false;
                 initSizes();    // определяем размеры изображения
                 PrgrsBar.Value = 0;
                 processType.Content = "Идет построение изображения...";
@@ -214,18 +217,15 @@ namespace GenomProj
         // DoWork метод для BGw для работы с изображением
         void iw_DoWork(object sender, DoWorkEventArgs e)
         {
-            
             int x = 0;  // координата Х
             int y = 0;  // координата У
-            int progress = 0;  // прогресс рисования изображения
-            
-            iw.ReportProgress(progress / width);                       
+                        
+            iw.ReportProgress(0);                       
             foreach (byte[] point in data)
             {
                 if (x >= (width - 1)) // если выведены все пиксели в строке
                 {
-                    iw.ReportProgress(progress / width);
-                    
+                    //iw.ReportProgress(progress / width);
                     x = 0;  
                     y += rowCount;
                     iw.ReportProgress(y);
@@ -241,9 +241,6 @@ namespace GenomProj
                 }
                 
                 x += colCount;
-                progress += colCount;
-                
-                
             }
 
             iw.ReportProgress(height);
@@ -260,19 +257,20 @@ namespace GenomProj
             img.Source = wb;
             OpenFile.IsEnabled = true;
             OK_btn.IsEnabled = true;
-            Save_btn.IsEnabled = true;            
+            Save_btn.IsEnabled = true;
+            paint_cb.IsEnabled = true;
         }
 
         void iw_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             PrgrsBar.Value = ((double)e.ProgressPercentage / height) * 100;
-            pbValueLb.Content = e.ProgressPercentage.ToString() + " / " + height.ToString() + " строк";
+            pbValueLb.Content = e.ProgressPercentage.ToString() + " / " + height.ToString();
         }
 
         // рисование точки заданным количеством пикселей
         private void drawPoint(byte[] point, int x, int y, int row, int col)
         {
-            int index = 1; // индекс
+            int index = 0; // индекс
             Int32Rect rect;
             for (int i = y; i < y + row; i++)
             {
@@ -358,7 +356,16 @@ namespace GenomProj
 
             img_size.Content = width.ToString() + "x" + height.ToString();
 
-            img.Source = wb;
+            if (paint_cb.IsChecked == true)
+            {
+                img.Source = wb;
+            }
+            else
+            {
+                img.Source = null;
+            }
+
+            
         }
 
         // кнопка закрыть программу
@@ -375,7 +382,7 @@ namespace GenomProj
         {
             SaveFileDialog sfd = new SaveFileDialog();  //диалог
             sfd.Filter = "Формат Jpeg|*.jpg|Формат BMP|*.bmp";
-            sfd.FileName = "Image " + width.ToString() + "x" + height.ToString();
+            sfd.FileName = filename.ToString() + " " + width.ToString() + "x" + height.ToString();
             sfd.ShowDialog();
             
             if (sfd.FileName != "")
