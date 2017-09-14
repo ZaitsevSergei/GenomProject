@@ -11,3 +11,17 @@ D:\GenomProj\GenomProj\obj\Release\GenomProj.Properties.Resources.resources
 D:\GenomProj\GenomProj\obj\Release\GenomProj.csproj.GenerateResource.Cache
 D:\GenomProj\GenomProj\obj\Release\GenomProj.exe
 D:\GenomProj\GenomProj\obj\Release\GenomProj.pdb
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\bin\Release\GenomProj.exe.config
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\bin\Release\GenomProj.exe
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\bin\Release\GenomProj.pdb
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\obj\Release\GenomProj.csprojResolveAssemblyReference.cache
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\obj\Release\MainWindow.baml
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\obj\Release\MainWindow.g.cs
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\obj\Release\App.g.cs
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\obj\Release\GenomProj_MarkupCompile.cache
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\obj\Release\GenomProj.g.resources
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\obj\Release\GenomProj.Properties.Resources.resources
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\obj\Release\GenomProj.csproj.GenerateResource.Cache
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\obj\Release\GenomProj.csproj.CoreCompileInputs.cache
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\obj\Release\GenomProj.exe
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\obj\Release\GenomProj.pdb

@@ -11,3 +11,17 @@ D:\GenomProj\GenomProj\obj\Debug\GenomProj.Properties.Resources.resources
 D:\GenomProj\GenomProj\obj\Debug\GenomProj.csproj.GenerateResource.Cache
 D:\GenomProj\GenomProj\obj\Debug\GenomProj.exe
 D:\GenomProj\GenomProj\obj\Debug\GenomProj.pdb
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\bin\Debug\GenomProj.exe.config
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\bin\Debug\GenomProj.exe
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\bin\Debug\GenomProj.pdb
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\obj\Debug\GenomProj.csprojResolveAssemblyReference.cache
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\obj\Debug\MainWindow.baml
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\obj\Debug\MainWindow.g.cs
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\obj\Debug\App.g.cs
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\obj\Debug\GenomProj_MarkupCompile.cache
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\obj\Debug\GenomProj.g.resources
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\obj\Debug\GenomProj.Properties.Resources.resources
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\obj\Debug\GenomProj.csproj.GenerateResource.Cache
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\obj\Debug\GenomProj.csproj.CoreCompileInputs.cache
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\obj\Debug\GenomProj.exe
+d:\Projects\GluzmanProjects\2016\GenomProj\GenomProj\obj\Debug\GenomProj.pdb

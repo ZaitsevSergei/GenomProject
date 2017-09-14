@@ -78,7 +78,7 @@ namespace GenomProj
             if (opf.ShowDialog() == true)
             {
                 filePath = opf.FileName;
-                filename = opf.SafeFileName;
+                filename = opf.SafeFileName.Replace(".txt", "");
                 FileName.Text = opf.FileName;
             }
             else 
@@ -116,7 +116,7 @@ namespace GenomProj
             processType.Content = "Загрузка файла завершена!";
         }
 
-        // Прогресс BGw для работы с фалом
+        // Прогресс BGw для работы с файлом
         void fw_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             PrgrsBar.Value = ((double)e.ProgressPercentage / filelinescount) * 100;
@@ -144,7 +144,7 @@ namespace GenomProj
                 }
                 if ((i % 100) == 0) //через каждые 100 строк обновляем прогресс бар
                 {
-                    Thread.Sleep(5);
+                    Thread.Sleep(2);
                     fw.ReportProgress(i + 1);
                 }
             }
@@ -220,32 +220,59 @@ namespace GenomProj
             int x = 0;  // координата Х
             int y = 0;  // координата У
                         
-            iw.ReportProgress(0);                       
-            foreach (byte[] point in data)
-            {
-                if (x >= (width - 1)) // если выведены все пиксели в строке
-                {
-                    //iw.ReportProgress(progress / width);
-                    x = 0;  
-                    y += rowCount;
-                    iw.ReportProgress(y);
-                }
-                if (iw.CancellationPending) //если нажата кнопка отмена
-                {
-                    e.Cancel = true;
-                    return;
-                }
-                else
-                {
-                    drawPoint(point, x, y, rowCount, colCount);
-                }
-                
-                x += colCount;
-            }
+            iw.ReportProgress(0);
+            Parallel.ForEach<byte[]>(data, (point) =>
+                                    {
+                                        if (x >= (width - 1)) // если выведены все пиксели в строке
+                                        {
+                                            //iw.ReportProgress(progress / width);
+                                            x = 0;
+                                            y += rowCount;
+                                            iw.ReportProgress(y);
+                                        }
+                                        if (iw.CancellationPending) //если нажата кнопка отмена
+                                        {
+                                            e.Cancel = true;
+                                            return;
+                                        }
+                                        else
+                                        {
+                                            drawPoint(point, x, y, rowCount, colCount);
+                                        }
+
+                                        x += colCount;
+                                    }
+            );
 
             iw.ReportProgress(height);
+
+
+            //foreach (byte[] point in data)
+            //{
+            //    if (x >= (width - 1)) // если выведены все пиксели в строке
+            //    {
+            //        //iw.ReportProgress(progress / width);
+            //        x = 0;  
+            //        y += rowCount;
+            //        iw.ReportProgress(y);
+            //    }
+            //    if (iw.CancellationPending) //если нажата кнопка отмена
+            //    {
+            //        e.Cancel = true;
+            //        return;
+            //    }
+            //    else
+            //    {
+            //        drawPoint(point, x, y, rowCount, colCount);
+            //    }
+                
+            //    x += colCount;
+            //}
+
+            //iw.ReportProgress(height);
         }
 
+        // Завешение работы BGw для работы с изображением
         void iw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             processType.Content = "Изображение готово!";
@@ -261,10 +288,11 @@ namespace GenomProj
             paint_cb.IsEnabled = true;
         }
 
+        // Прогресс BGw для работы с изображением
         void iw_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             PrgrsBar.Value = ((double)e.ProgressPercentage / height) * 100;
-            pbValueLb.Content = e.ProgressPercentage.ToString() + " / " + height.ToString();
+            pbValueLb.Content = e.ProgressPercentage.ToString() + " / " + height.ToString() + " пикселей";
         }
 
         // рисование точки заданным количеством пикселей
@@ -306,6 +334,7 @@ namespace GenomProj
             double sqrt = Math.Sqrt(scale); // квадратный корень масштаба
             int sqrtInt = (int)sqrt;        // целая часть
 
+            //расчет количества строк и столбцов для вывода точки
             if ((sqrt - sqrtInt) == 0)   // масштаб - квадрат числа, кол-во строк = столбцам
             {
                 rowCount = sqrtInt;
@@ -322,7 +351,6 @@ namespace GenomProj
                 colCount = sqrtInt + 1;
             }
             
-
             // инициализация размеров
             int dimPerPoint = rowCount * colCount;  // разрешение : пикселей на точку
             int pixelCount = dimPerPoint * data.Count; //количество пикселей в изображении
@@ -354,8 +382,9 @@ namespace GenomProj
                         PixelFormats.Bgr32,
                         null);
 
-            img_size.Content = width.ToString() + "x" + height.ToString();
+            img_size.Content = width.ToString() + "x" + height.ToString();  // вывод на экран разрешение изображения
 
+            // вывод пикселей на экран
             if (paint_cb.IsChecked == true)
             {
                 img.Source = wb;
@@ -363,9 +392,7 @@ namespace GenomProj
             else
             {
                 img.Source = null;
-            }
-
-            
+            }            
         }
 
         // кнопка закрыть программу
@@ -421,7 +448,6 @@ namespace GenomProj
                 encoder.Frames.Add(BitmapFrame.Create(wb.Clone()));
                 encoder.Save(stream);
             }
-        }
-        
+        }        
     }
 }
